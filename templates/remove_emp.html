@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Remove Employee</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 0;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .hero-section h1 {
+            margin-bottom: 20px;
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        .main-container {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 40px;
+            background-color: white;
+            margin-top: -50px;
+            position: relative;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 50px;
+        }
+        .divider {
+            width: 80px;
+            height: 4px;
+            background: white;
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2d3436;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            text-transform: capitalize;
+        }
+        .form-control {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #e3e6f0;
+            transition: all 0.3s ease;
+            color: #2d3436;
+        }
+        .form-control:focus {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+        }
+        .form-control::placeholder {
+            color: #95a5a6;
+        }
+        .submit-button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .submit-button:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .back-button {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 20px;
+        }
+        .employee-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .employee-card {
+            border: 1px solid #e3e6f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        .employee-card:hover {
+            background-color: #f8f9fa;
+            transform: translateX(5px);
+        }
+    </style>
+  </head>
+  <body>
+    <div class="hero-section">
+        <div class="container">
+            <h1><i class="fas fa-user-minus"></i> Remove Employee</h1>
+            <div class="divider"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-container">
+            <div class="back-button">
+                <a href="/" class="btn btn-danger">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+            
+            <form action="/remove_emp" method="POST">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="emp_id" class="form-label">Select Employee to Remove</label>
+                    <select class="form-control" name="emp_id" required>
+                        <option value="">Select an employee...</option>
+                        {% for emp in emps %}
+                            <option value="{{ emp.id }}">{{ emp.First_name }} {{ emp.Last_name }} (ID: {{ emp.id }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-button" onclick="return confirm('Are you sure you want to remove this employee?')">
+                    <i class="fas fa-trash"></i> Remove Employee
+                </button>
+            </form>
+
+            <hr>
+
+            <h4 class="mt-4 mb-3">Current Employees</h4>
+            <div class="employee-list">
+                {% for emp in emps %}
+                    <div class="employee-card">
+                        <h5>{{ emp.First_name }} {{ emp.Last_name }}</h5>
+                        <p class="mb-0">
+                            <small>
+                                <strong>Department:</strong> {{ emp.dept.name }} | 
+                                <strong>Role:</strong> {{ emp.role.name }} | 
+                                <strong>ID:</strong> {{ emp.id }}
+                            </small>
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
